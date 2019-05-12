@@ -6,7 +6,7 @@ namespace Vertilia\Response;
 /**
  * Children must handle HTTP response characteristics, like status code, headers etc.
  */
-interface HttpResponseInterface
+interface HttpResponseInterface extends ResponseInterface
 {
     /**
      * @return int HTTP status code
@@ -22,9 +22,4 @@ interface HttpResponseInterface
      * @return array HTTP response headers
      */
     public function getHeaders(): array;
-
-    /**
-     * Output response content
-     */
-    public function render();
 }
