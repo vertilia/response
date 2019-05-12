@@ -1,0 +1,24 @@
+{
+    "name": "vertilia/response",
+    "description": "Simple library to abstract responses (CLI, HTTP, etc.)",
+    "license": "BSD-2-Clause",
+    "type": "library",
+    "autoload": {
+        "exclude-from-classmap": [
+            "/tests/"
+        ],
+        "psr-4": {
+            "Vertilia\\Response\\": "src/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true
+    },
+    "require": {
+        "php": "^7.1",
+        "vertilia/valid-array": "^1.0"
+    },
+    "suggest": {
+        "phpunit/phpunit": "To run tests"
+    }
+}
