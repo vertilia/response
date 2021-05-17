@@ -13,7 +13,7 @@ namespace Vertilia\Response;
 class HtmlResponse extends HttpResponse
 {
     /** @var string */
-    protected $content_type = 'text/html';
+    protected string $content_type = 'text/html';
     /** @var Closure|resource|string a Closure, a file handler opened with fopen() or a string */
     public $content;
 
@@ -21,12 +21,12 @@ class HtmlResponse extends HttpResponse
     {
         $this->preRender();
 
-        if (\is_scalar($this->content)) {
+        if (is_scalar($this->content)) {
             echo $this->content;
-        } elseif (\is_resource($this->content)) {
-            \rewind($this->content);
-            \fpassthru($this->content);
-            \fclose($this->content);
+        } elseif (is_resource($this->content)) {
+            rewind($this->content);
+            fpassthru($this->content);
+            fclose($this->content);
         } elseif ($this->content instanceof \Closure) {
             ($this->content)();
         }

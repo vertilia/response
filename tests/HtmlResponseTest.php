@@ -29,8 +29,6 @@ class HtmlResponseTest extends TestCase
     /**
      * @runInSeparateProcess
      * @covers ::render
-     * @param mixed $content
-     * @param string $expected
      */
     public function testRender()
     {
@@ -47,8 +45,8 @@ class HtmlResponseTest extends TestCase
 
         // file handler
         $string = "buffer test string\n";
-        $buffer = \fopen('php://memory', 'r+');
-        \fputs($buffer, $string);
+        $buffer = fopen('php://memory', 'r+');
+        fputs($buffer, $string);
         $response->content = $buffer;
 
         // check output

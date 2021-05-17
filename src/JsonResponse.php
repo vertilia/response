@@ -9,11 +9,11 @@ namespace Vertilia\Response;
 class JsonResponse extends HttpResponse
 {
     /** @var string */
-    protected $content_type = 'application/json';
+    protected string $content_type = 'application/json';
 
     public function render()
     {
         $this->preRender();
-        echo \json_encode((array)$this, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE);
+        echo json_encode((array)$this, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     }
 }

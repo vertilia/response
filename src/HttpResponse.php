@@ -12,17 +12,17 @@ use Vertilia\ValidArray\ValidArray;
 class HttpResponse extends ValidArray implements HttpResponseInterface
 {
     /** @var int */
-    protected $status_code = 200;
+    protected int $status_code = 200;
     /** @var string */
-    protected $content_type;
+    protected string $content_type;
     /** @var array */
-    protected $headers = [];
+    protected array $headers = [];
 
     /**
      * Defines response filters and sets Content-Type if defined
      *
      * @param array $filters
-     * @param string $content_type
+     * @param string|null $content_type
      */
     public function __construct(array $filters, string $content_type = null)
     {
@@ -36,7 +36,7 @@ class HttpResponse extends ValidArray implements HttpResponseInterface
      * Sets response status code
      *
      * @param int $status_code
-     * @return \Vertilia\Response\HttpResponse
+     * @return HttpResponse
      */
     public function setStatusCode(int $status_code): HttpResponse
     {
@@ -48,7 +48,7 @@ class HttpResponse extends ValidArray implements HttpResponseInterface
      * Sets response content type
      *
      * @param string $content_type
-     * @return \Vertilia\Response\HttpResponse
+     * @return HttpResponse
      */
     public function setContentType(string $content_type): HttpResponse
     {
@@ -63,14 +63,14 @@ class HttpResponse extends ValidArray implements HttpResponseInterface
      * @param string $name
      * @param string $value
      * @param bool $multiple
-     * @return \Vertilia\Response\HttpResponse
+     * @return HttpResponse
      */
     public function setHeader(string $name, string $value, bool $multiple = false): HttpResponse
     {
-        $name_lcase = \strtolower($name);
+        $name_lcase = strtolower($name);
 
         if ($multiple and isset($this->headers[$name_lcase])) {
-            if (!\is_array($this->headers[$name_lcase])) {
+            if (!is_array($this->headers[$name_lcase])) {
                 $this->headers[$name_lcase] = [$this->headers[$name_lcase]];
             }
             $this->headers[$name_lcase][] = $value;
@@ -84,7 +84,7 @@ class HttpResponse extends ValidArray implements HttpResponseInterface
     public function preRender()
     {
         // define response status code
-        \http_response_code($this->status_code);
+        http_response_code($this->status_code);
 
         // set Content-Type header if defined
         if (isset($this->content_type)) {
@@ -94,12 +94,12 @@ class HttpResponse extends ValidArray implements HttpResponseInterface
         // send all headers
         if ($this->headers) {
             foreach ($this->headers as $h_name => $h_value) {
-                if (\is_array($h_value)) {
+                if (is_array($h_value)) {
                     foreach ($h_value as $val) {
-                        \header("$h_name: $val", false);
+                        header("$h_name: $val", false);
                     }
                 } else {
-                    \header("$h_name: $h_value");
+                    header("$h_name: $h_value");
                 }
             }
         }

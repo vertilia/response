@@ -38,21 +38,21 @@ class HttpResponseTest extends TestCase
      * @param string $content_type
      * @param array $headers
      */
-    public function testHttpResponse($status_code, $content_type, $headers)
+    public function testHttpResponse(int $status_code, string $content_type, array $headers)
     {
         $response = (new HttpResponse([]))->setStatusCode($status_code)->setContentType($content_type);
-        if (\is_array($headers)) {
+        if (is_array($headers)) {
             foreach ($headers as $name => $value) {
                 $response->setHeader($name, $value);
             }
         }
         $this->assertEquals($status_code, $response->getStatusCode());
         $this->assertEquals($content_type, $response->getContentType());
-        $this->assertEquals(\array_change_key_case($headers, \CASE_LOWER), $response->getHeaders());
+        $this->assertEquals(array_change_key_case($headers, CASE_LOWER), $response->getHeaders());
     }
 
     /** data provider */
-    public function httpResponseProvider()
+    public function httpResponseProvider(): array
     {
         return [
             [200, 'plain/html', ['Connection' => 'close']],
@@ -80,7 +80,7 @@ class HttpResponseTest extends TestCase
     }
 
     /** data provider */
-    public function setHeaderProvider()
+    public function setHeaderProvider(): array
     {
         return [
             [['Connection' => 'close'], 'My-Header', 'My Value', false, ['connection' => 'close', 'my-header' => 'My Value']],
@@ -95,15 +95,15 @@ class HttpResponseTest extends TestCase
      * @dataProvider preRenderProvider
      * @covers ::setHeader
      * @covers ::preRender
-     * @param string $content_type
+     * @param string|null $content_type
      * @param array $headers
      * @param array $expected_headers
      */
-    public function testPreRender($content_type, array $headers, array $expected_headers)
+    public function testPreRender(?string $content_type, array $headers, array $expected_headers)
     {
         $response = new HttpResponse([], $content_type);
         foreach ($headers as $h_name => $h_value) {
-            if (\is_array($h_value)) {
+            if (is_array($h_value)) {
                 foreach ($h_value as $v) {
                     $response->setHeader($h_name, $v, true);
                 }
@@ -123,12 +123,12 @@ class HttpResponseTest extends TestCase
         // best effort code
         // will not work since headers not registered in CLI environment and
         // headers_list() will always return empty array
-//        $this->assertEquals($expected_headers, \headers_list());
-        $this->assertEquals([], \headers_list());
+//        $this->assertEquals($expected_headers, headers_list());
+        $this->assertEquals([], headers_list());
     }
 
     /** data provider */
-    public function preRenderProvider()
+    public function preRenderProvider(): array
     {
         return [
             [null, ['connection' => 'My Value'], ['connection: My Value']],

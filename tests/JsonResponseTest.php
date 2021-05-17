@@ -31,6 +31,7 @@ class JsonResponseTest extends TestCase
      * @dataProvider renderProvider
      * @covers ::render
      * @param array $filter
+     * @param array $values
      * @param string $expected
      */
     public function testRender(array $filter, array $values, string $expected)
@@ -49,11 +50,11 @@ class JsonResponseTest extends TestCase
     }
 
     /** data provider */
-    public function renderProvider()
+    public function renderProvider(): array
     {
         return [
-            [['a' => \FILTER_DEFAULT], ['a' => 'b'], '{"a":"b"}'],
-            [['id' => ['filter'=>\FILTER_VALIDATE_INT, 'flags' => \FILTER_FORCE_ARRAY]], ['id' => 15], '{"id":[15]}'],
+            [['a' => FILTER_DEFAULT], ['a' => 'b'], '{"a":"b"}'],
+            [['id' => ['filter'=>FILTER_VALIDATE_INT, 'flags' => FILTER_FORCE_ARRAY]], ['id' => 15], '{"id":[15]}'],
         ];
     }
 }
