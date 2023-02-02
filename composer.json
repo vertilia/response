@@ -11,18 +11,12 @@
             "Vertilia\\Response\\": "src/"
         }
     },
-    "config": {
-        "optimize-autoloader": true,
-        "platform": {
-            "php": "7.4"
-        }
-    },
     "require": {
-        "php": "^7.4",
+        "php": ">=7.4",
         "ext-json": "*",
         "vertilia/valid-array": "^1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "*"
     }
 }
