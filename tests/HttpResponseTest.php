@@ -3,7 +3,6 @@
 namespace Vertilia\Response;
 
 use PHPUnit\Framework\TestCase;
-use Vertilia\ValidArray\ValidArray;
 
 /**
  * @coversDefaultClass HttpResponse
@@ -11,8 +10,8 @@ use Vertilia\ValidArray\ValidArray;
 class HttpResponseTest extends TestCase
 {
     /**
-     * @covers ::__construct
-     * @covers ::getContentType
+     * @covers HttpResponse::__construct
+     * @covers HttpResponse::getContentType
      */
     public function testHttpResponseConstruct()
     {
@@ -20,39 +19,32 @@ class HttpResponseTest extends TestCase
 
         // check inheritances
         $this->assertInstanceOf(HttpResponseInterface::class, $response);
-        $this->assertInstanceOf(ValidArray::class, $response);
 
         // check right Content-Type
-        $this->assertEquals('plain/unknown', $response->getContentType());
+        $this->assertSame('plain/unknown', $response->getContentType());
     }
 
     /**
-     * @dataProvider httpResponseProvider
-     * @covers ::setStatusCode
-     * @covers ::setContentType
-     * @covers ::setHeader
-     * @covers ::getStatusCode
-     * @covers ::getContentType
-     * @covers ::getHeaders
-     * @param int $status_code
-     * @param string $content_type
-     * @param array $headers
+     * @dataProvider providerHttpResponse
+     * @covers HttpResponse::setStatusCode
+     * @covers HttpResponse::setContentType
+     * @covers HttpResponse::setHeader
+     * @covers HttpResponse::getStatusCode
+     * @covers HttpResponse::getContentType
+     * @covers HttpResponse::getHeaders
      */
     public function testHttpResponse(int $status_code, string $content_type, array $headers)
     {
         $response = (new HttpResponse([]))->setStatusCode($status_code)->setContentType($content_type);
-        if (is_array($headers)) {
-            foreach ($headers as $name => $value) {
-                $response->setHeader($name, $value);
-            }
+        foreach ($headers as $name => $value) {
+            $response->setHeader($name, $value);
         }
-        $this->assertEquals($status_code, $response->getStatusCode());
-        $this->assertEquals($content_type, $response->getContentType());
-        $this->assertEquals(array_change_key_case($headers, CASE_LOWER), $response->getHeaders());
+        $this->assertSame($status_code, $response->getStatusCode());
+        $this->assertSame($content_type, $response->getContentType());
+        $this->assertSame(array_change_key_case($headers, CASE_LOWER), $response->getHeaders());
     }
 
-    /** data provider */
-    public function httpResponseProvider(): array
+    public static function providerHttpResponse(): array
     {
         return [
             [200, 'plain/html', ['Connection' => 'close']],
@@ -61,14 +53,9 @@ class HttpResponseTest extends TestCase
     }
 
     /**
-     * @dataProvider setHeaderProvider
-     * @covers ::setHeader
-     * @covers ::getHeaders
-     * @param array $headers
-     * @param string $name
-     * @param string $value
-     * @param bool $multiple
-     * @param mixed $expected_headers
+     * @dataProvider providerSetHeader
+     * @covers HttpResponse::setHeader
+     * @covers HttpResponse::getHeaders
      */
     public function testSetHeader(array $headers, string $name, string $value, bool $multiple, array $expected_headers)
     {
@@ -76,11 +63,10 @@ class HttpResponseTest extends TestCase
         foreach ($headers as $h_name => $h_value) {
             $response->setHeader($h_name, $h_value);
         }
-        $this->assertEquals($expected_headers, $response->setHeader($name, $value, $multiple)->getHeaders());
+        $this->assertSame($expected_headers, $response->setHeader($name, $value, $multiple)->getHeaders());
     }
 
-    /** data provider */
-    public function setHeaderProvider(): array
+    public static function providerSetHeader(): array
     {
         return [
             [['Connection' => 'close'], 'My-Header', 'My Value', false, ['connection' => 'close', 'my-header' => 'My Value']],
@@ -92,12 +78,9 @@ class HttpResponseTest extends TestCase
 
     /**
      * @runInSeparateProcess
-     * @dataProvider preRenderProvider
-     * @covers ::setHeader
-     * @covers ::preRender
-     * @param string|null $content_type
-     * @param array $headers
-     * @param array $expected_headers
+     * @dataProvider providerPreRender
+     * @covers HttpResponse::setHeader
+     * @covers HttpResponse::preRender
      */
     public function testPreRender(?string $content_type, array $headers, array $expected_headers)
     {
@@ -117,18 +100,17 @@ class HttpResponseTest extends TestCase
         // find $content_type in headers
         if ($content_type) {
             $this->assertArrayHasKey('content-type', $response->getHeaders());
-            $this->assertEquals($content_type, $response->getHeaders()['content-type']);
+            $this->assertSame($content_type, $response->getHeaders()['content-type']);
         }
 
         // best effort code
         // will not work since headers not registered in CLI environment and
         // headers_list() will always return empty array
-//        $this->assertEquals($expected_headers, headers_list());
-        $this->assertEquals([], headers_list());
+//        $this->assertSame($expected_headers, headers_list());
+        $this->assertSame([], headers_list());
     }
 
-    /** data provider */
-    public function preRenderProvider(): array
+    public static function providerPreRender(): array
     {
         return [
             [null, ['connection' => 'My Value'], ['connection: My Value']],

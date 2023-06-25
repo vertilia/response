@@ -1,30 +1,23 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Vertilia\Response;
 
-use Vertilia\ValidArray\ValidArray;
-
 /**
- * Represents HTTP response with its status code, headers and content. Allows
- * array access to all validated arguments following predefined filters.
+ * HTTP response with its status code, headers and content. Allows array access to all validated arguments following
+ * predefined filters.
  */
-class HttpResponse extends ValidArray implements HttpResponseInterface
+class HttpResponse extends Response implements HttpResponseInterface
 {
-    /** @var int */
     protected int $status_code = 200;
-    /** @var string */
-    protected string $content_type;
-    /** @var array */
+    protected ?string $content_type = null;
     protected array $headers = [];
 
     /**
-     * Defines response filters and sets Content-Type if defined
-     *
-     * @param array $filters
-     * @param string|null $content_type
+     * Define response filters and set Content-Type if known
      */
-    public function __construct(array $filters, string $content_type = null)
+    public function __construct(array $filters, ?string $content_type = null)
     {
         parent::__construct($filters);
         if (isset($content_type)) {
@@ -32,39 +25,18 @@ class HttpResponse extends ValidArray implements HttpResponseInterface
         }
     }
 
-    /**
-     * Sets response status code
-     *
-     * @param int $status_code
-     * @return HttpResponse
-     */
     public function setStatusCode(int $status_code): HttpResponse
     {
         $this->status_code = $status_code;
         return $this;
     }
 
-    /**
-     * Sets response content type
-     *
-     * @param string $content_type
-     * @return HttpResponse
-     */
     public function setContentType(string $content_type): HttpResponse
     {
         $this->content_type = $content_type;
         return $this;
     }
 
-    /**
-     * Sets response header or adds another value to existing header if header
-     * allows multiple values
-     *
-     * @param string $name
-     * @param string $value
-     * @param bool $multiple
-     * @return HttpResponse
-     */
     public function setHeader(string $name, string $value, bool $multiple = false): HttpResponse
     {
         $name_lcase = strtolower($name);
@@ -118,10 +90,5 @@ class HttpResponse extends ValidArray implements HttpResponseInterface
     public function getHeaders(): array
     {
         return $this->headers;
-    }
-
-    public function render()
-    {
-        $this->preRender();
     }
 }

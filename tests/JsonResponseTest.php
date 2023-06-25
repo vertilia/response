@@ -3,7 +3,6 @@
 namespace Vertilia\Response;
 
 use PHPUnit\Framework\TestCase;
-use Vertilia\ValidArray\ValidArray;
 
 /**
  * @coversDefaultClass JsonResponse
@@ -11,8 +10,8 @@ use Vertilia\ValidArray\ValidArray;
 class JsonResponseTest extends TestCase
 {
     /**
-     * @covers ::__construct
-     * @covers ::getContentType
+     * @covers JsonResponse::__construct
+     * @covers JsonResponse::getContentType
      */
     public function testHttpResponseConstruct()
     {
@@ -20,7 +19,6 @@ class JsonResponseTest extends TestCase
 
         // check inheritances
         $this->assertInstanceOf(HttpResponseInterface::class, $response);
-        $this->assertInstanceOf(ValidArray::class, $response);
 
         // check right Content-Type
         $this->assertEquals('application/json', $response->getContentType());
@@ -28,11 +26,8 @@ class JsonResponseTest extends TestCase
 
     /**
      * @runInSeparateProcess
-     * @dataProvider renderProvider
-     * @covers ::render
-     * @param array $filter
-     * @param array $values
-     * @param string $expected
+     * @dataProvider providerRender
+     * @covers JsonResponse::render
      */
     public function testRender(array $filter, array $values, string $expected)
     {
@@ -49,8 +44,7 @@ class JsonResponseTest extends TestCase
         $this->assertEquals($expected, ob_get_clean());
     }
 
-    /** data provider */
-    public function renderProvider(): array
+    public static function providerRender(): array
     {
         return [
             [['a' => FILTER_DEFAULT], ['a' => 'b'], '{"a":"b"}'],

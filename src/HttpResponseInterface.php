@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Vertilia\Response;
 
@@ -9,17 +8,20 @@ namespace Vertilia\Response;
 interface HttpResponseInterface extends ResponseInterface
 {
     /**
-     * @return int HTTP status code
+     * Set response status code
      */
+    public function setStatusCode(int $status_code): HttpResponse;
     public function getStatusCode(): int;
 
     /**
-     * @return string HTTP content type
+     * Set response content type
      */
+    public function setContentType(string $content_type): HttpResponse;
     public function getContentType(): string;
 
     /**
-     * @return array HTTP response headers
+     * Set response header or add another value to existing header if header allows multiple values
      */
+    public function setHeader(string $name, string $value, bool $multiple = false): HttpResponse;
     public function getHeaders(): array;
 }

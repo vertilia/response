@@ -1,6 +1,6 @@
 {
     "name": "vertilia/response",
-    "description": "Simple library to abstract responses (CLI, HTTP, etc.)",
+    "description": "Library to abstract server responses (CLI and/or HTTP)",
     "license": "BSD-2-Clause",
     "type": "library",
     "autoload": {
@@ -14,9 +14,9 @@
     "require": {
         "php": ">=7.4",
         "ext-json": "*",
-        "vertilia/valid-array": "^1.0"
+        "vertilia/valid-array": "^1"
     },
     "require-dev": {
-        "phpunit/phpunit": "*"
+        "phpunit/phpunit": "^9"
     }
 }

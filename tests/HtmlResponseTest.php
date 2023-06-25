@@ -3,7 +3,6 @@
 namespace Vertilia\Response;
 
 use PHPUnit\Framework\TestCase;
-use Vertilia\ValidArray\ValidArray;
 
 /**
  * @coversDefaultClass HtmlResponse
@@ -11,8 +10,8 @@ use Vertilia\ValidArray\ValidArray;
 class HtmlResponseTest extends TestCase
 {
     /**
-     * @covers ::__construct
-     * @covers ::getContentType
+     * @covers HttpResponse::__construct
+     * @covers HttpResponse::getContentType
      */
     public function testHttpResponseConstruct()
     {
@@ -20,15 +19,14 @@ class HtmlResponseTest extends TestCase
 
         // check inheritances
         $this->assertInstanceOf(HttpResponseInterface::class, $response);
-        $this->assertInstanceOf(ValidArray::class, $response);
 
         // check right Content-Type
-        $this->assertEquals('text/html', $response->getContentType());
+        $this->assertSame('text/html', $response->getContentType());
     }
 
     /**
      * @runInSeparateProcess
-     * @covers ::render
+     * @covers HttpResponse::render
      */
     public function testRender()
     {
@@ -41,7 +39,7 @@ class HtmlResponseTest extends TestCase
         // check output
         ob_start();
         $response->render();
-        $this->assertEquals($string, ob_get_clean());
+        $this->assertSame($string, ob_get_clean());
 
         // file handler
         $string = "buffer test string\n";
@@ -52,7 +50,7 @@ class HtmlResponseTest extends TestCase
         // check output
         ob_start();
         $response->render();
-        $this->assertEquals($string, ob_get_clean());
+        $this->assertSame($string, ob_get_clean());
 
         // file handler
         $string = 'callback test string';
@@ -61,6 +59,6 @@ class HtmlResponseTest extends TestCase
         // check output
         ob_start();
         $response->render();
-        $this->assertEquals($string, ob_get_clean());
+        $this->assertSame($string, ob_get_clean());
     }
 }

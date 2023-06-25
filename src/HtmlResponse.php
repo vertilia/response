@@ -1,19 +1,19 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Vertilia\Response;
 
+use Closure;
+
 /**
- * Represents HTML HTTP response of "plain/html" content type. Exposes $content
- * public property which may be used as a string buffer to collect output or
- * as a file handler to receive output via fputs() and alike. If opened as
- * 'php://temp' then stores up to 2M in memory, then automatically switches to
- * disk file.
+ * HTML HTTP response of "plain/html" content type. Exposes $content public property which may be used as a string
+ * buffer to collect output or as a file handler to receive output via fputs() and alike. If opened as 'php://temp' then
+ * stores up to 2M in memory, then automatically switches to disk file.
  */
 class HtmlResponse extends HttpResponse
 {
-    /** @var string */
-    protected string $content_type = 'text/html';
+    protected ?string $content_type = 'text/html';
     /** @var Closure|resource|string a Closure, a file handler opened with fopen() or a string */
     public $content;
 
@@ -27,7 +27,7 @@ class HtmlResponse extends HttpResponse
             rewind($this->content);
             fpassthru($this->content);
             fclose($this->content);
-        } elseif ($this->content instanceof \Closure) {
+        } elseif ($this->content instanceof Closure) {
             ($this->content)();
         }
     }
